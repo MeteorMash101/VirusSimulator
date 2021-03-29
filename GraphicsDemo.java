@@ -8,7 +8,7 @@ public class GraphicsDemo extends JPanel implements ActionListener {
     private Timer timer;
     private static final int DELAY = 40;
     private static final int CIRCLE_DIM = 25;
-    private static final double INFECT_DIST = 80;
+    private static final double INFECT_DIST = 30;
     private static final int NUM_OF_PPL = 15;
     // private Person p1;
     // private Person p2;
@@ -58,10 +58,13 @@ public class GraphicsDemo extends JPanel implements ActionListener {
     public void generatePeople() {
         // hasCovid, hasMaskOn, isVax...
         // make fewer ppl have covid...?
-
+        int temp = 0;
+        boolean infectedBool = false;
         int maxAge = 100;
         for (int i = 0; i < numOfPeople; i++) {
-            peopleList.add(new Person(stringHelper(i), 1 + rd.nextInt(maxAge), rd.nextBoolean(), rd.nextBoolean(), rd.nextBoolean()));
+            temp = rd.nextInt(100);
+            infectedBool = (temp < 35) ? true : false;
+            peopleList.add(new Person(stringHelper(i), 1 + rd.nextInt(maxAge), infectedBool, rd.nextBoolean(), rd.nextBoolean()));
         }
 
         // // For Testing
