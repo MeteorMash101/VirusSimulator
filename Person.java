@@ -6,6 +6,9 @@ public class Person {
     private boolean hasCovid;
     private boolean hasMaskOn;
     private boolean isVax;
+    private static final int MASK_EFFICIENCY = 40; // _%?
+    private static final int VAX_EFFICIENCY = 95; // 95%?
+    private static final int INFECTION_RATE = 100; // 100% chance you'll get covid if you come into contact & no protect.
     
     Random rand = new Random();
     
@@ -49,49 +52,51 @@ public class Person {
         return medicalRisk;
     }
 
-    public void infect(Person pInContact) {
-        int maskEff = 40; // 65%?
-        int vaxEff = 95; // 95%?
-        if (!pInContact.isPositive()) {
-            if (this.hasCovid) {
-                int infectionRate = 100; // 100% chance you'll get covid if you come into contact.
-                int chance = rand.nextInt(100); // 0 up to, not incl. 100 (100 numbers).
-                if (pInContact.hasMaskOn || this.hasMaskOn) { // masks reduce chance of covid by 65%
-                    chance -= maskEff;
-                    if (pInContact.hasMaskOn && this.hasMaskOn) { // if both
-                        chance -= maskEff;
-                    }
-                }
-                if (pInContact.isVax || this.isVax) { // (technically), 99.96% of vaccinated ppl don't get covid
-                    chance -= vaxEff; // we'll use 95% reduction chance..
-                    if (pInContact.isVax && this.isVax) { // if both
-                        chance -= vaxEff;
-                    }
-                }
-                // almost guranteed you won't get it if you maskOn + Vax...
-                switch(pInContact.medicalRisk) { // some adjustments based on health (optional)
-                    case "LOW":
-                        chance -= 7;
-                        break;
-                    case "MEDIUM":
-                        chance -= 4;
-                        break;
-                    case "HIGH":
-                        chance -= 1;
-                        break;
-                }
-                // has to be less than b/c starts w/ 0
-                // if neg. obv they will be completely safe.
-                boolean infected = (0 <= chance && chance < infectionRate); 
-                if (infected) {
-                    pInContact.hasCovid = true;
-                }
-            }
-        }
-    }
-
     public void setHasCovid(boolean status) {
         this.hasCovid = status;
+    }
+    
+    // Assumes base case scenario (infected ppl w/ vaccine will NOT spread...)
+    // can make more realistic w/ weighted mask/vax % depending on whos wearing it...
+    public boolean infect(Person pInContact) {
+        int infectionRate = INFECTION_RATE;
+        if (pInContact.hasMaskOn() || this.hasMaskOn) { // masks reduce chance of covid by _%
+            infectionRate -= MASK_EFFICIENCY;
+            System.out.println("a node HAS MASK!");
+            if (pInContact.hasMaskOn() && this.hasMaskOn) { // if both
+                infectionRate -= MASK_EFFICIENCY;
+                System.out.println("BOTH HAS MASK!");
+            }
+        }
+        // (technically), 99.96% of vaccinated ppl don't get covid
+        if (pInContact.isVax() || this.isVax) { // vaxs reduce chance of covid by _%
+            infectionRate -= VAX_EFFICIENCY; // we'll use 95% reduction chance..
+            System.out.println("a node HAS VAX!");
+            if (pInContact.isVax() && this.isVax) { // if both
+                infectionRate -= VAX_EFFICIENCY;
+                System.out.println("BOTH HAS VAX!");
+            }
+        }
+        // almost guranteed you won't get it if you maskOn + Vax...
+        switch(pInContact.getMedicalRisk()) { // some minor adjustments based on health (optional)
+            case "LOW":
+                infectionRate -= 7;
+                break;
+            case "MEDIUM":
+                infectionRate -= 4;
+                break;
+            case "HIGH":
+                infectionRate -= 1;
+                break;
+        }
+        // has to be less than b/c starts w/ 0
+        boolean infected = (rand.nextInt(100) < infectionRate); // 0 up to, not incl. 100 (100 numbers).
+        if (infected) {
+            pInContact.setHasCovid(true);
+            return true;
+        } else {
+            return false; // no transmission - cud be lucky!
+        }
     }
 
     @Override
