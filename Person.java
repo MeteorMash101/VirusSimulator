@@ -71,10 +71,10 @@ public class Person {
         // (technically), 99.96% of vaccinated ppl don't get covid
         if (pInContact.isVax() || this.isVax) { // vaxs reduce chance of covid by _%
             infectionRate -= VAX_EFFICIENCY; // we'll use 95% reduction chance..
-            System.out.println("a node HAS VAX!");
+            // System.out.println("a node HAS VAX!");
             if (pInContact.isVax() && this.isVax) { // if both
                 infectionRate -= VAX_EFFICIENCY;
-                System.out.println("BOTH HAS VAX!"); 
+                // System.out.println("BOTH HAS VAX!"); 
             }
         }
         // almost guranteed you won't get it if you maskOn + Vax...

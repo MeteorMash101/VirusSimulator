@@ -62,16 +62,12 @@ public class GraphicsDemo extends JPanel implements ActionListener {
         for (int i = 0; i < numOfPeople; i++) {
             temp = rd.nextInt(100);
             hasCovidBool = (temp < COVID_POP);
-            System.out.println("NEW SHIT: " + hasCovidBool);
             if (hasCovidBool) {
                 hasMaskOnBool = false;
                 isVaxBool = false;
             } else {
                 hasMaskOnBool = (temp < MASK_POP);
                 isVaxBool = (temp < VAX_POP);
-                System.out.println(hasMaskOnBool);
-                System.out.println(isVaxBool);
-
             }
             peopleList.add(new Person(stringHelper(i), 1 + rd.nextInt(maxAge), hasCovidBool, hasMaskOnBool, isVaxBool));
         }
