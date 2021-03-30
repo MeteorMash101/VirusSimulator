@@ -11,7 +11,7 @@ public class Node {
 	private Color color;
     private Person personObj;
 
-    private static final int VEL_CTRL = 10; // like "steps"
+    private static final int VEL_CTRL = 3; // like "steps"
     private static final int MIN = 0;
     private static final int MAX = 575; // WIDTH/HEIGHT - width of Node
 
@@ -84,5 +84,31 @@ public class Node {
     }
     public Person getPerson() {
         return this.personObj;
+    }
+
+    // equals method
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Node) {
+            Node otherNode = (Node) obj;
+
+            boolean sameX;
+            boolean sameY;
+            boolean sameWidth;
+            boolean sameHeight;
+            boolean sameColor;
+            boolean samePersonObj;
+
+            sameX = (this.x == otherNode.getX());
+            sameY = (this.y == otherNode.getY());
+            sameWidth = (this.width == otherNode.getWidth());
+            sameHeight = (this.height == otherNode.getHeight());
+            sameColor = (this.color == otherNode.getColor());
+            samePersonObj = (this.personObj.equals(otherNode.getPerson()));
+            return sameX && sameY && sameWidth && sameHeight && sameColor && samePersonObj;
+
+        } else {
+            return false;
+        }
     }
 }

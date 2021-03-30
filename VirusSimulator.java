@@ -17,7 +17,6 @@ public class VirusSimulator {
         }
         System.out.println(result); // # of ppl infected...
     }
-
     // private static void welcomeMessage() { // welcome/inform user
     //     System.out.println(
     //             "Hello! Welcome to Virus Simulator! Let's inject a virus into a city's population! =)");
